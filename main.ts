@@ -325,6 +325,21 @@ app.post("/messages", async (req, res) => {
   }
 });
 
+app.use(async (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader) return res.status(401).send('Missing Authorization header');
+
+  const token = authHeader.split(' ')[1];
+  jwt.verify(token, getKey, {
+    audience: 'claude-mcp',
+    issuer: 'https://uat-auth.peoplestrong.com/auth/realms/3',
+  }, (err, decoded) => {
+    if (err) return res.status(403).send('Invalid token');
+    req.user = decoded;
+    next();
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 /* ---------- 5. Start server --------------------------------------- */
 app.listen(PORT, '0.0.0.0', () => console.log("MCP server running"));
