@@ -1,0 +1,20 @@
+{
+  "name": "hackathon",
+  "version": "1.0.0",
+  "description": "my first ai agent",
+  "main": "main.ts",
+  "scripts": {
+    "test": "npx tsx main.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.11.0",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "node-fetch": "^3.3.2",
+    "openai": "^4.97.0",
+    "undici": "^7.8.0",
+    "zod": "^3.24.3"
+  }
+}
