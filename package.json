@@ -4,7 +4,7 @@
   "description": "my first ai agent",
   "main": "main.ts",
   "scripts": {
-    "test": "npx tsx main.ts"
+  	"start": "tsx main.ts"
   },
   "author": "",
   "license": "ISC",
