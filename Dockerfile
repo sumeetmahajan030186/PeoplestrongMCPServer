@@ -13,8 +13,8 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Build the TypeScript code
-RUN npx tsx main.ts
+# Start the app using tsx
+CMD ["npx", "tsx", "main.ts"]
 
 # Expose the application port (adjust if your app uses a different port)
 EXPOSE 3000
