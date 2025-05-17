@@ -326,6 +326,4 @@ app.post("/messages", async (req, res) => {
 });
 
 /* ---------- 5. Start server --------------------------------------- */
-app.listen(3000, () =>
-   console.log("✅ MCP up – SSE stream at http://localhost:3000/sse?id=<uuid>")
-);
+app.listen(3000, '0.0.0.0', () => console.log("MCP server running"));
