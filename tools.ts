@@ -82,7 +82,6 @@ export async function getPSTokenWithApiKey(
       organizationId: args.organizationId,
       sysModuleName: args.sysModuleName
     };
-    console.log( args.routePath+"...."+args.organizationId+"...."+args.sysModuleName);
     const res = await fetch(url, {
       method: "POST",
       headers: {
@@ -135,6 +134,7 @@ async function psPost(
       body: JSON.stringify(args),
       signal: controller.signal
     });
+    console.log(res);
     if (!res.ok) {
       const txt = await res.text().catch(() => "");
       throw new Error(`API error ${res.status}: ${txt}`);
