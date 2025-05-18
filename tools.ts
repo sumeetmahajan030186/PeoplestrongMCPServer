@@ -56,7 +56,11 @@ export async function fetchPSToken(
     const json = await res.json() as { access_token?: string };
     if (!json.access_token) throw new Error("No access_token in response");
     return json.access_token;
-  } finally {
+  } catch (err) {
+    // Re‑throw with a consistent prefix so callers can recognise it
+    throw new Error(`fetchPSToken failed: ${(err as Error).message}`);
+  }
+  finally {
     clearTimeout(timer);
   }
 }
@@ -98,7 +102,10 @@ export async function getPSTokenWithApiKey(
       apiKey:      json.apiKey      ?? "(no apiKey in response)",
       accessToken: json.accessToken ?? "(no accessToken in response)"
     };
-  } finally {
+  }catch (err: any) {
+    // normalize error
+    throw new Error(`getPSTokenWithApiKey failed: ${err.message}`);
+  }  finally {
     clearTimeout(timer);
   }
 }
@@ -146,24 +153,33 @@ export async function getEmployeeDetails(
     endDate?:   { value: string; field: Array<{ fieldCode: string; operator: string }> };
   }
 ): Promise<any> {
-  const { apiKey, accessToken } = await getPSTokenWithApiKey({
-    organizationId: 3,
-    sysModuleName:  "HRIS",
-    routePath:     "/api/integration/Outbound/PeopleStrongHRServices_HRIS_testAgent"
-  });
-  const payload: any = {
-    integrationMasterName: "testAgent",
-    dynamicFilter: args.dynamicFilter ?? []
-  };
-  if (args.startDate?.value) payload.startDate = args.startDate;
-  if (args.endDate?.value)   payload.endDate   = args.endDate;
-  return await psPost(
-    "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_testAgent",
-    payload,
-    apiKey,
-    accessToken
-  );
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:      "/api/integration/Outbound/PeopleStrongHRServices_HRIS_testAgent"
+    });
+
+    const payload: any = {
+      integrationMasterName: "testAgent",
+      dynamicFilter: args.dynamicFilter ?? []
+    };
+
+    if (args.startDate?.value) payload.startDate = args.startDate;
+    if (args.endDate?.value)   payload.endDate   = args.endDate;
+
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_testAgent",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeeDetails:", error);
+    throw new Error(`getEmployeeDetails failed: ${error.message}`);
+  }
 }
+
 
 /**
  * Fetch various Employee “document” details (bank, confirmation, exit, promotion)
@@ -171,70 +187,292 @@ export async function getEmployeeDetails(
 export async function getEmployeeBankDocumentDetails(
   args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
 ): Promise<any> {
-  const { apiKey, accessToken } = await getPSTokenWithApiKey({
-    organizationId: 3,
-    sysModuleName:  "HRIS",
-    routePath:     "/api/integration/Outbound/PeopleStrongHRServices_HRIS_testAgent1"
-  });
-  const payload = { integrationMasterName: "testAgent1", dynamicFilter: args.dynamicFilter ?? [] };
-  return await psPost(
-    "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_testAgent1",
-    payload,
-    apiKey,
-    accessToken
-  );
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:      "/api/integration/Outbound/PeopleStrongHRServices_HRIS_testAgent1"
+    });
+
+    const payload = {
+      integrationMasterName: "testAgent1",
+      dynamicFilter: args.dynamicFilter ?? []
+    };
+
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_testAgent1",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeeBankDocumentDetails:", error);
+    throw new Error(`getEmployeeBankDocumentDetails failed: ${error.message}`);
+  }
 }
+
 
 export async function getEmployeeConfirmationDocumentDetails(
   args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
 ): Promise<any> {
-  const { apiKey, accessToken } = await getPSTokenWithApiKey({
-    organizationId: 3,
-    sysModuleName:  "HRIS",
-    routePath:     "/api/integration/Outbound/PeopleStrongHRServices_HRIS_confirmationAgentTool"
-  });
-  const payload = { integrationMasterName: "confirmationAgentTool", dynamicFilter: args.dynamicFilter ?? [] };
-  return await psPost(
-    "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_confirmationAgentTool",
-    payload,
-    apiKey,
-    accessToken
-  );
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:      "/api/integration/Outbound/PeopleStrongHRServices_HRIS_confirmationAgentTool"
+    });
+
+    const payload = {
+      integrationMasterName: "confirmationAgentTool",
+      dynamicFilter: args.dynamicFilter ?? []
+    };
+
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_confirmationAgentTool",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeeConfirmationDocumentDetails:", error);
+    throw new Error(`getEmployeeConfirmationDocumentDetails failed: ${error.message}`);
+  }
 }
+
 
 export async function getEmployeeExitDocumentDetails(
   args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
 ): Promise<any> {
-  const { apiKey, accessToken } = await getPSTokenWithApiKey({
-    organizationId: 3,
-    sysModuleName:  "HRIS",
-    routePath:     "/api/integration/Outbound/PeopleStrongHRServices_HRIS_exitDocumentDetails"
-  });
-  const payload = { integrationMasterName: "exitDocumentDetails", dynamicFilter: args.dynamicFilter ?? [] };
-  return await psPost(
-    "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_exitDocumentDetails",
-    payload,
-    apiKey,
-    accessToken
-  );
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:      "/api/integration/Outbound/PeopleStrongHRServices_HRIS_exitDocumentDetails"
+    });
+
+    const payload = {
+      integrationMasterName: "exitDocumentDetails",
+      dynamicFilter: args.dynamicFilter ?? []
+    };
+
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_exitDocumentDetails",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeeExitDocumentDetails:", error);
+    throw new Error(`getEmployeeExitDocumentDetails failed: ${error.message}`);
+  }
 }
+
 
 export async function getEmployeePromotionDocumentDetails(
   args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
 ): Promise<any> {
-  const { apiKey, accessToken } = await getPSTokenWithApiKey({
-    organizationId: 3,
-    sysModuleName:  "HRIS",
-    routePath:     "/api/integration/Outbound/PeopleStrongHRServices_HRIS_promotionAgentTool"
-  });
-  const payload = { integrationMasterName: "promotionAgentTool", dynamicFilter: args.dynamicFilter ?? [] };
-  return await psPost(
-    "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_promotionAgentTool",
-    payload,
-    apiKey,
-    accessToken
-  );
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:      "/api/integration/Outbound/PeopleStrongHRServices_HRIS_promotionAgentTool"
+    });
+
+    const payload = {
+      integrationMasterName: "promotionAgentTool",
+      dynamicFilter: args.dynamicFilter ?? []
+    };
+
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_promotionAgentTool",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeePromotionDocumentDetails:", error);
+    throw new Error(`getEmployeePromotionDocumentDetails failed: ${error.message}`);
+  }
 }
+
+
+export async function getEmployeeExitDocumentDetails(
+  args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
+): Promise<any> {
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:      "/api/integration/Outbound/PeopleStrongHRServices_HRIS_exitDocumentDetails"
+    });
+
+    const payload = {
+      integrationMasterName: "exitDocumentDetails",
+      dynamicFilter: args.dynamicFilter ?? []
+    };
+
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_exitDocumentDetails",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeeExitDocumentDetails:", error);
+    throw new Error(`getEmployeeExitDocumentDetails failed: ${error.message}`);
+  }
+}
+
+export async function getEmployeeIDDocumentDetails(
+  args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
+): Promise<any> {
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:      "/api/integration/Outbound/PeopleStrongHRServices_HRIS_IdDocumentDetails"
+    });
+
+    const payload = {
+      integrationMasterName: "IdDocumentDetails",
+      dynamicFilter: args.dynamicFilter ?? []
+    };
+
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_IdDocumentDetails",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeeIDDocumentDetails:", error);
+    throw new Error(`getEmployeeIDDocumentDetails failed: ${error.message}`);
+  }
+}
+
+
+
+export async function getEmployeeContactDetails(
+  args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
+): Promise<any> {
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:      "/api/integration/Outbound/PeopleStrongHRServices_HRIS_contactAgentTool"
+    });
+
+    const payload = {
+      integrationMasterName: "contactAgentTool",
+      dynamicFilter: args.dynamicFilter ?? []
+    };
+
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_contactAgentTool",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeeContactDetails:", error);
+    throw new Error(`getEmployeeContactDetails failed: ${error.message}`);
+  }
+}
+
+
+export async function getEmployeeDependentDetails(
+  args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
+): Promise<any> {
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:     "/api/integration/Outbound/PeopleStrongHRServices_HRIS_dependentAgenttool"
+    });
+    const payload = { integrationMasterName: "dependentAgenttool", dynamicFilter: args.dynamicFilter ?? [] };
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_dependentAgenttool",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeeDependentDetails:", error);
+    throw new Error(`getEmployeeDependentDetails failed: ${error.message}`);
+  }
+}
+
+
+export async function getEmployeeEmergencyContactDetails(
+  args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
+): Promise<any> {
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:     "/api/integration/Outbound/PeopleStrongHRServices_HRIS_emergencyAgentTool"
+    });
+    const payload = { integrationMasterName: "emergencyAgentTool", dynamicFilter: args.dynamicFilter ?? [] };
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_emergencyAgentTool",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeeEmergencyContactDetails:", error);
+    throw new Error(`getEmployeeEmergencyContactDetails failed: ${error.message}`);
+  }
+}
+
+
+export async function getEmployeeSkillDetails(
+  args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
+): Promise<any> {
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:     "/api/integration/Outbound/PeopleStrongHRServices_HRIS_skillAgentTool"
+    });
+    const payload = { integrationMasterName: "skillAgentTool", dynamicFilter: args.dynamicFilter ?? [] };
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_skillAgentTool",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeeSkillDetails:", error);
+    throw new Error(`getEmployeeSkillDetails failed: ${error.message}`);
+  }
+}
+
+
+export async function getEmployeeTransferDetails(
+  args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
+): Promise<any> {
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "HRIS",
+      routePath:     "/api/integration/Outbound/PeopleStrongHRServices_HRIS_transferAgentTool"
+    });
+    const payload = { integrationMasterName: "transferAgentTool", dynamicFilter: args.dynamicFilter ?? [] };
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_transferAgentTool",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getEmployeeTransferDetails:", error);
+    throw new Error(`getEmployeeTransferDetails failed: ${error.message}`);
+  }
+}
+
+
+
 
 /**
  * Fetch Candidate details
@@ -242,17 +480,23 @@ export async function getEmployeePromotionDocumentDetails(
 export async function getCandidateDetails(
   args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
 ): Promise<any> {
-  const { apiKey, accessToken } = await getPSTokenWithApiKey({
-    organizationId: 3,
-    sysModuleName:  "Recruit",
-    routePath:     "/api/integration/Outbound/PeopleStrongHRServices_Recruit_candidateDetailsTool"
-  });
-  const payload = { integrationMasterName: "candidateDetailsTool", dynamicFilter: args.dynamicFilter ?? [] };
-  return await psPost(
-    "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_Recruit_candidateDetailsTool",
-    payload,
-    apiKey,
-    accessToken
-  );
+  try {
+    const { apiKey, accessToken } = await getPSTokenWithApiKey({
+      organizationId: 3,
+      sysModuleName:  "Recruit",
+      routePath:     "/api/integration/Outbound/PeopleStrongHRServices_Recruit_candidateDetailsTool"
+    });
+    const payload = { integrationMasterName: "candidateDetailsTool", dynamicFilter: args.dynamicFilter ?? [] };
+    return await psPost(
+      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_Recruit_candidateDetailsTool",
+      payload,
+      apiKey,
+      accessToken
+    );
+  } catch (error: any) {
+    console.error("❌ Error in getCandidateDetails:", error);
+    throw new Error(`getCandidateDetails failed: ${error.message}`);
+  }
 }
+
 
