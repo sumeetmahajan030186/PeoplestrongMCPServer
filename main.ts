@@ -118,7 +118,6 @@ mcp.tool(
     description: "Retrieve employee Confirmation records, and Filter by Employee Code"
    }
 );
-);
 
 mcp.tool(
   "getEmployeeExitDocumentDetails",

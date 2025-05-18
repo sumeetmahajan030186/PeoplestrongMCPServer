@@ -82,6 +82,7 @@ export async function getPSTokenWithApiKey(
       organizationId: args.organizationId,
       sysModuleName: args.sysModuleName
     };
+    console.log( args.routePath+"...."+args.organizationId+"...."+args.sysModuleName);
     const res = await fetch(url, {
       method: "POST",
       headers: {
@@ -93,6 +94,7 @@ export async function getPSTokenWithApiKey(
       body: JSON.stringify(body),
       signal: controller.signal
     });
+    console.log(res);
     if (!res.ok) {
       const txt = await res.text().catch(() => "");
       throw new Error(`HTTP ${res.status}: ${txt}`);
@@ -239,35 +241,6 @@ export async function getEmployeeConfirmationDocumentDetails(
   }
 }
 
-
-export async function getEmployeeExitDocumentDetails(
-  args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
-): Promise<any> {
-  try {
-    const { apiKey, accessToken } = await getPSTokenWithApiKey({
-      organizationId: 3,
-      sysModuleName:  "HRIS",
-      routePath:      "/api/integration/Outbound/PeopleStrongHRServices_HRIS_exitDocumentDetails"
-    });
-
-    const payload = {
-      integrationMasterName: "exitDocumentDetails",
-      dynamicFilter: args.dynamicFilter ?? []
-    };
-
-    return await psPost(
-      "https://uat-api.peoplestrong.com/api/integration/Outbound/PeopleStrongHRServices_HRIS_exitDocumentDetails",
-      payload,
-      apiKey,
-      accessToken
-    );
-  } catch (error: any) {
-    console.error("❌ Error in getEmployeeExitDocumentDetails:", error);
-    throw new Error(`getEmployeeExitDocumentDetails failed: ${error.message}`);
-  }
-}
-
-
 export async function getEmployeePromotionDocumentDetails(
   args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
 ): Promise<any> {
@@ -349,8 +322,6 @@ export async function getEmployeeIDDocumentDetails(
     throw new Error(`getEmployeeIDDocumentDetails failed: ${error.message}`);
   }
 }
-
-
 
 export async function getEmployeeContactDetails(
   args: { dynamicFilter?: Array<{ fieldCode: string; operator: string; value: string }> }
