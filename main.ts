@@ -137,7 +137,7 @@ const jwtKeyCallback = (
   callback: (err: Error | null, secret?: jwt.Secret) => void
 ) => callback(null, process.env.JWT_SECRET!);
 
-app.use((req, res, next) => {
+/*app.use((req, res, next) => {
   const authHeader = req.headers['authorization'];
   if (!authHeader) return res.status(401).send('Missing Authorization header');
   const token = authHeader.split(' ')[1];
@@ -151,7 +151,7 @@ app.use((req, res, next) => {
       next();
     }
   );
-});
+});*/
 
 // SSE connection streams
 const streams = new Map<string, SSEServerTransport>();
