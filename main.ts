@@ -91,11 +91,101 @@ const hrSchemas = {
 mcp.tool(
   "getEmployeeDetails",
   hrSchemas,
-  async (args) => ({ content: [{ type: "json", json: await getEmployeeDetails(args) }] }),
-    {
-    title:       "Employee Data",
-    description: "Retrieve employee records, optionally filtering by dynamicFilter and date range"
-   }
+  async (args) => ({
+    content: [{ type: "json", json: await getEmployeeDetails(args) }]
+  }),
+  {
+    title: "Employee Data",
+    description: "Retrieve employee records, optionally filtering by dynamicFilter and date range",
+    type: "function",
+    function: {
+      name: "getEmployeeDetails",
+      description:
+        "Use this function to fetch employee information. If no filters or dates are provided, all employee records will be fetched based on the integration master name.",
+      parameters: {
+        type: "object",
+        properties: {
+          dynamicFilter: {
+            type: "array",
+            description: "Optional array of dynamic filters to refine employee search.",
+            items: {
+              type: "object",
+              properties: {
+                fieldCode: {
+                  type: "string",
+                  description: "Field to filter on (e.g. 'Employee Name','Grade','Employment Status')"
+                },
+                operator: {
+                  type: "string",
+                  description: "Filter operator (e.g. 'in', '=', '>', '<')"
+                },
+                value: {
+                  type: "string",
+                  description: "Value to match against (e.g. 'Radha Davis')"
+                }
+              },
+              required: ["fieldCode", "operator", "value"]
+            }
+          },
+          startDate: {
+            type: "object",
+            description: "Optional filter for start date, which can be used in combination with dynamic filters.",
+            properties: {
+              value: {
+                type: "string",
+                description: "The value of the start date (e.g. '2025-04-15')."
+              },
+              field: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    fieldCode: {
+                      type: "string",
+                      description: "Field to filter on (e.g. 'Birth Date')."
+                    },
+                    operator: {
+                      type: "string",
+                      description: "Filter operator for the start date (e.g. '>=')."
+                    }
+                  },
+                  required: ["fieldCode", "operator"]
+                }
+              }
+            }
+          },
+          endDate: {
+            type: "object",
+            description: "Optional filter for end date, which can be used in combination with dynamic filters.",
+            properties: {
+              value: {
+                type: "string",
+                description: "The value of the end date (e.g. '2025-04-30')."
+              },
+              field: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    fieldCode: {
+                      type: "string",
+                      description: "Field to filter on (e.g. 'Birth Date')."
+                    },
+                    operator: {
+                      type: "string",
+                      description: "Filter operator for the end date (e.g. '<=')."
+                    }
+                  },
+                  required: ["fieldCode", "operator"]
+                }
+              }
+            }
+          }
+        },
+        required: []
+      }
+    }
+  }
 );
 
 // Document details (bank, confirmation, exit, promotion)

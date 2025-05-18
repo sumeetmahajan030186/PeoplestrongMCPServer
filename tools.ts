@@ -123,6 +123,7 @@ async function psPost(
 ): Promise<any> {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(new Error("Request timed out")), timeoutMs);
+    let toolResult: string;
   try {
     const res = await fetch(url, {
       method: "POST",
@@ -139,10 +140,30 @@ async function psPost(
       const txt = await res.text().catch(() => "");
       throw new Error(`API error ${res.status}: ${txt}`);
     }
-    return await res.json();
+    toolResult = await res.json();
+	    let employeeList: any[] = [];
+	    if (
+	      toolResult &&
+	      toolResult.root &&
+	      toolResult.root.EmployeeMaster &&
+	      Array.isArray(toolResult.root.EmployeeMaster.EmployeeMasterData)
+	    ) {
+	      employeeList = toolResult.root.EmployeeMaster.EmployeeMasterData;
+	    } else {
+	      console.warn("⚠️ No valid employee array found");
+	    }
+
+	    // Get the top 5 employees
+	    const top5 = employeeList.slice(0, 5);
+	    toolResult = JSON.stringify(top5);
+	    console.log("result fetched");
+	  } catch (err: any) {
+	    console.error("❌ Detailed error occurred:", err);
+	    toolResult = `❌ Error fetching tokens – ${err.message}`;
   } finally {
     clearTimeout(timer);
   }
+	    return toolResult;
 }
 
 /**
