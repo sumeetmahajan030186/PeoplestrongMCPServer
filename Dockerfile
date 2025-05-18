@@ -5,10 +5,11 @@ FROM node:18
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy manifests
+COPY package.json package-lock.json tsconfig.json ./
 
-# Install project dependencies
-RUN npm install
+# Install project dependencies ci is clean install
+RUN npm ci 
 
 # Copy the rest of the application code
 COPY . .
