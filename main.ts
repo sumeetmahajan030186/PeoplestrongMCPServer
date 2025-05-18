@@ -91,39 +91,134 @@ const hrSchemas = {
 mcp.tool(
   "getEmployeeDetails",
   hrSchemas,
-  async (args) => ({ content: [{ type: "json", json: await getEmployeeDetails(args) }] })
+  async (args) => ({ content: [{ type: "json", json: await getEmployeeDetails(args) }] }),
+    {
+    title:       "Employee Data",
+    description: "Retrieve employee records, optionally filtering by dynamicFilter and date range"
+   }
 );
 
 // Document details (bank, confirmation, exit, promotion)
 mcp.tool(
-  "getEmployeeBankDocumentDetails",
+  "getEmployeeBankDetails",
   { dynamicFilter: hrSchemas.dynamicFilter },
-  async (args) => ({ content: [{ type: "json", json: await getEmployeeBankDocumentDetails(args) }] })
+  async (args) => ({ content: [{ type: "json", json: await getEmployeeBankDetails(args) }] }),
+   {
+    title:       "Employee Bank Data",
+    description: "Retrieve employee bank records, and Filter by Employee Code"
+   }
 );
 
 mcp.tool(
   "getEmployeeConfirmationDocumentDetails",
   { dynamicFilter: hrSchemas.dynamicFilter },
-  async (args) => ({ content: [{ type: "json", json: await getEmployeeConfirmationDocumentDetails(args) }] })
+  async (args) => ({ content: [{ type: "json", json: await getEmployeeConfirmationDocumentDetails(args) }] }),
+   {
+    title:       "Employee Confirmation Data",
+    description: "Retrieve employee Confirmation records, and Filter by Employee Code"
+   }
+);
 );
 
 mcp.tool(
   "getEmployeeExitDocumentDetails",
   { dynamicFilter: hrSchemas.dynamicFilter },
-  async (args) => ({ content: [{ type: "json", json: await getEmployeeExitDocumentDetails(args) }] })
+  async (args) => ({ content: [{ type: "json", json: await getEmployeeExitDocumentDetails(args) }] }),
+  {
+    title:       "Employee Exit Data",
+    description: "Retrieve employee exit records,and Filter by Employee Code"
+   }
+  
 );
 
 mcp.tool(
   "getEmployeePromotionDocumentDetails",
   { dynamicFilter: hrSchemas.dynamicFilter },
-  async (args) => ({ content: [{ type: "json", json: await getEmployeePromotionDocumentDetails(args) }] })
+  async (args) => ({ content: [{ type: "json", json: await getEmployeePromotionDocumentDetails(args) }] }),
+   {
+    title:       "Employee Promotion Data",
+    description: "Retrieve employee Promotion records, and Filter by Employee Code"
+   }
 );
+
+mcp.tool(
+  "getEmployeeIDDocumentDetails",
+  { dynamicFilter: hrSchemas.dynamicFilter },
+  async (args) => ({ content: [{ type: "json", json: await getEmployeeIDDocumentDetails(args) }] }),
+   {
+    title:       "Employee ID Data",
+    description: "Retrieve employee ID records, and Filter by Employee Code"
+   }
+);
+
+mcp.tool(
+  "getEmployeeContactDetails",
+  { dynamicFilter: hrSchemas.dynamicFilter },
+  async (args) => ({ content: [{ type: "json", json: await getEmployeeContactDetails(args) }] }),
+   {
+    title:       "Employee Confirmation Data",
+    description: "Retrieve employee Confirmation records, and Filter by Employee Code"
+   }
+);
+
+mcp.tool(
+  "getEmployeeDependentDetails",
+  { dynamicFilter: hrSchemas.dynamicFilter },
+  async (args) => ({ content: [{ type: "json", json: await getEmployeeDependentDetails(args) }] }),
+   {
+    title:       "Employee Dependent Data",
+    description: "Retrieve employee Dependent records, and Filter by Employee Code"
+   }
+);
+
+mcp.tool(
+  "getEmployeeEmergencyContactDetails",
+  { dynamicFilter: hrSchemas.dynamicFilter },
+  async (args) => ({ content: [{ type: "json", json: await getEmployeeEmergencyContactDetails(args) }] }),
+   {
+    title:       "Employee EmergencyContact Data",
+    description: "Retrieve employee EmergencyContact records, and Filter by Employee Code"
+   }
+);
+
+mcp.tool(
+  "getEmployeeNominationDetails",
+  { dynamicFilter: hrSchemas.dynamicFilter },
+  async (args) => ({ content: [{ type: "json", json: await getEmployeeNominationDetails(args) }] }),
+   {
+    title:       "Employee Nomination Data",
+    description: "Retrieve employee Nomination records, and Filter by Employee Code"
+   }
+);
+mcp.tool(
+  "getEmployeeSkillDetails",
+  { dynamicFilter: hrSchemas.dynamicFilter },
+  async (args) => ({ content: [{ type: "json", json: await getEmployeeSkillDetails(args) }] }),
+   {
+    title:       "Employee Skill Data",
+    description: "Retrieve employee Skill records, and Filter by Employee Code"
+   }
+);
+mcp.tool(
+  "getEmployeeTransferDetails",
+  { dynamicFilter: hrSchemas.dynamicFilter },
+  async (args) => ({ content: [{ type: "json", json: await getEmployeeTransferDetails(args) }] }),
+   {
+    title:       "Employee Transfer Data",
+    description: "Retrieve employee Transfer records, and Filter by Employee Code"
+   }
+);
+
 
 // Candidate master details
 mcp.tool(
   "getCandidateDetails",
   { dynamicFilter: hrSchemas.dynamicFilter },
-  async (args) => ({ content: [{ type: "json", json: await getCandidateDetails(args) }] })
+  async (args) => ({ content: [{ type: "json", json: await getCandidateDetails(args) }] }),
+   {
+    title:       "Employee Candidate Data",
+    description: "Retrieve employee Candidate records, and Filter by Employee Code"
+   }
 );
 
 /* ---------- 4. HTTP layer ----------------------------------------- */
